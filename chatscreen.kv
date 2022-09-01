@@ -1,0 +1,121 @@
+<ChatPage>:
+	name:'chat_'
+	MDBoxLayout:
+		orientation:'vertical'
+		padding:dp(1),dp(0)
+		MDToolbar:
+			title:'Advisor'
+			left_action_items:[['account-circle',lambda x:x]]
+		ScrollView:
+			MDBoxLayout:
+				orientation:'vertical'
+				adaptive_height:True
+				padding:dp(7)
+				spacing:dp(4)
+				id:chatting
+				MDFillRoundFlatButton:
+					text:"This chat is end-to-end encrypted."
+					theme_text_color:'Custom'
+					text_color:1,.4,.4,1
+					bold:True
+					font_size:dp(11)
+					md_bg_color:.2,.2,.2,.1
+					pos_hint:{'center_x':.5}
+				MDLabel:
+					text:'Today'
+					halign:'center'
+					size_hint_y:None
+					height:dp(20)
+					color:.3,.2,.2,.7
+
+		MDBoxLayout:
+			spacing:dp(25)
+			padding:dp(5)
+			size_hint_y:None
+			height:dp(50)
+			MDLabel:
+				size_hint_x:dp(.01)
+
+
+			MDIconButton:
+				icon:'send'
+				id:sendbutton
+				
+				user_font_size:dp(10)
+				md_bg_color:0,.7,.6,.6
+				
+				on_press:
+					self.md_bg_color=.2,.2,.2,1
+				on_release:
+					self.md_bg_color=0,.7,.6,.6
+					root.receiveMessage()
+					#self.disabled=True
+			
+			MDTextFieldRound:
+				id:sendmessage
+				icon_left:'emoticon-happy'
+				line_color:0,0,0,1
+				size_hint_y:dp(1)
+				multiline:True
+				hint_text:'Message'
+				on_text:root.ids.sendbutton.disabled=False if len(self.text)>0 else True
+				#size_hint_x:.2
+				#pos_hint:{'x':10}
+
+			MDIconButton:
+				icon:'send'
+				id:sendbutton
+				user_font_size:dp(20)
+				md_bg_color:0,.7,.6,.6
+				disabled:True
+				on_press:
+					self.md_bg_color=.2,.2,.2,1
+				on_release:
+					self.md_bg_color=0,.7,.6,.6
+					root.sendMessage()
+					self.disabled=True
+
+
+
+<MySentLabel>:
+	markup:True
+	id:sent
+	background_color:(0,.7,.6,.6)
+	size_hint_y:None
+	size_hint_x:dp(.7) if len(self.text)>26 else dp(.7)*len(self.text)/25 if len(self.text)>=5 else dp(.14)
+	height:self.texture_size[1]*1.5 if (len(self.text)>27 and len(self.text)<54) else self.texture_size[1]*2.1 if len(self.text)<=20 else self.texture_size[1]*2.3 if (len(self.text)>20 and len(self.text)<=27) else self.texture_size[1]*1.12
+	text_size:(self.width*.92,None) if len(self.text)>27 else (self.width*.86,None)
+	valign:'middle'
+	pos_hint:{'right':1}
+	halign:'left'
+	canvas.before:
+		Color:
+			rgba:self.background_color
+		RoundedRectangle:
+			size:self.size
+			pos:self.pos
+			radius:10,-1,10,10
+
+<MyReceivedLabel>:
+	halign:'center'
+	background_color:(.18,.1,.1,.93)
+	size_hint_y:None
+	adaptive_height:True
+	theme_text_color:'Custom'
+	text_color:1,1,1,1
+	height:self.texture_size[1]*1.5 if (len(self.text)>27 and len(self.text)<54) else self.texture_size[1]*2.1 if len(self.text)<=20 else self.texture_size[1]*2.5 if (len(self.text)>20 and len(self.text)<=27) else self.texture_size[1]*1.12
+
+	text_size:(self.width*.92,None) if len(self.text)>27 else (self.width*.86,None)
+
+	valign:'middle'
+	halign:'left'
+	size_hint_x:dp(.7) if len(self.text)>26 else dp(.7)*len(self.text)/25 if len(self.text)>=5 else dp(.14)
+
+	canvas.before:
+		Color:
+			rgba:self.background_color
+		RoundedRectangle:
+			size:self.size
+			pos:self.pos
+			radius:-1,10,10,10
+              
